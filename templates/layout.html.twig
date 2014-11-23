@@ -23,7 +23,7 @@
             <ul>
                 <li><a href="/">Home</a></li>
                 <li><a href="/dashboard">Dashboard</a></li>
-                <li><a href="#" class="button special">Sign In</a></li>
+                <li><a href="javascript:_smyq.login()" class="button special">Sign In</a></li>
             </ul>
         </nav>
     </header>
@@ -72,7 +72,7 @@
         <script src="/js/main.js"></script>
         <script>
             jQuery().ready(function() {
-                new SMYQ("");
+                window._smyq = new SMYQ({});
             });
         </script>
         <script>

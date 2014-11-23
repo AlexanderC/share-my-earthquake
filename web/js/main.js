@@ -8,7 +8,9 @@
         config = $.extend(defaults, config);
 
         return {
-
+            login: function() {
+                console.log("Login...");
+            }
         };
     };
 })(jQuery);
