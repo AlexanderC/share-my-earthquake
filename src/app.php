@@ -47,7 +47,10 @@ $app['auth.twitter'] = $app->share(function() use ($app) {
     return $twitter;
 });
 $app['twig'] = $app->share($app->extend('twig', function (Twig_Environment $twig, $app) {
-    $twig->addGlobal('_logged_in', $app['auth.twitter']->isLoggedIn());
+    $twitter = $app['auth.twitter'];
+
+    $twig->addGlobal('_logged_in', $twitter->isLoggedIn());
+    $twig->addGlobal('_security_user', $twitter->isLoggedIn() ? $twitter->getUser() : null);
 
     return $twig;
 }));

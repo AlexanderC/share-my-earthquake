@@ -5,6 +5,10 @@
 {% block content %}
     <!-- One -->
     <section id="one" class="wrapper style1">
+        <header class="major">
+            <h3>Welcome {{ user.firstName }}</h3>
+            <img width="70" class="image" src="{{ _security_user.profile_image_url }}" alt="{{ _security_user.name }}"/>
+        </header>
         <div class="container">
             <div class="row">
                 <div class="6u">
