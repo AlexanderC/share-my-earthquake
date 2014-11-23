@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title '' %} - Share My Earthquake</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta name="description" content="Share My Earthquake would share the hazard on preferred social networks for you" />
+        <meta name="keywords" content="harthquake,hazard,share hazard,share earthquake,social hazard,social earthquake" />
+
+        <noscript>
+            <link rel="stylesheet" href="/css/skel.css" />
+            <link rel="stylesheet" href="/css/style.css" />
+            <link rel="stylesheet" href="/css/style-xlarge.css" />
+        </noscript>
+
+        <link href="/css/main.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body id="top">
+
+    <!-- Header -->
+    <header id="header" class="skel-layers-fixed">
+        <h1><a href="#">SMYQ</a></h1>
+        <nav id="nav">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="#" class="button special">Sign In</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    {% block content %}{% endblock %}
+
+    <!-- Footer -->
+    <footer id="footer">
+        <div class="container">
+            <div class="row double">
+                <div class="6u">
+                    <div class="row collapse-at-2">
+                        <div class="12u">
+                            <h3>FAQ</h3>
+                            <ul class="alt">
+                                <li><a href="http://en.wikipedia.org/wiki/Earthquake">What's an earthquake?</a></li>
+                                <li><a href="http://earthquake.usgs.gov">What's the source for the data used by SMEQ?</a></li>
+                                <li><a href="http://earthquake.usgs.gov/earthquakes/eqarchives/year/eqstats.php">How often the earthquakes happens?</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="6u">
+                    <h2>SMEQ - Share My Earthquake</h2>
+                    <p>Keep you social feed up to date with the latest hazards happened to you.</p>
+                    <ul class="icons">
+                        <li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+                        <li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+                        <li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
+                        <li><a href="#" class="icon fa-linkedin"><span class="label">LinkedIn</span></a></li>
+                        <li><a href="#" class="icon fa-pinterest"><span class="label">Pinterest</span></a></li>
+                    </ul>
+                </div>
+            </div>
+            <ul class="copyright">
+                <li>&copy; AlexanderC 2014. All rights reserved.</li>
+            </ul>
+        </div>
+    </footer>
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <!--[if lte IE 8]><script src="/js/html5shiv.js"></script><![endif]-->
+        <script src="/js/skel.min.js"></script>
+        <script src="/js/skel-layers.min.js"></script>
+        <script src="/js/init.js"></script>
+        <script src="/js/main.js"></script>
+        <script>
+            jQuery().ready(function() {
+                new SMYQ("");
+            });
+        </script>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-31592474-3', 'auto');
+            ga('send', 'pageview');
+
+        </script>
+    </body>
+</html>
