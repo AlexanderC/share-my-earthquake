@@ -15,5 +15,5 @@ namespace SMYQ\Share;
  */
 interface SocialAccountInterface
 {
-    const TWITTER = 0x001;
+    const TWITTER = 'twitter';
 } 

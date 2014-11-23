@@ -22,7 +22,8 @@
         "symfony/twig-bridge": "~2.3",
         "symfony/validator": "~2.3",
         "doctrine/mongodb-odm": "1.0.0-BETA11",
-        "jmikola/geojson": "1.0.*@dev"
+        "jmikola/geojson": "1.0.*@dev",
+        "jublonet/codebird-php": "2.6.0"
     },
     "autoload": {
         "psr-0": { "": "src/" }

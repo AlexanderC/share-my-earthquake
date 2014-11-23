@@ -11,12 +11,15 @@ $app['odm.config'] = [
     ],
     'manager' => [
         'proxyDir' =>  __DIR__.'/../var/cache/odm/Proxies',
-        'proxyNamespace' => '/Proxies',
+        'proxyNamespace' => 'Proxies',
         'hydratorDir' =>  __DIR__.'/../var/cache/odm/Hydrators',
-        'hydratorNamespace' => '/Hydrators',
+        'hydratorNamespace' => 'Hydrators',
         'defaultDB' => 'smeq'
     ]
 ];
 $app['sharer.config'] = [
-
+    'twitter' => [
+        'key' => 'CqTe8jWSXpscGTus86l5y2v1O',
+        'secret' => 'UfOk43dwaEjIpclzQbHPT6cQLwgb4jSJFl4p8OX3QViGXJ3sDb',
+    ]
 ];

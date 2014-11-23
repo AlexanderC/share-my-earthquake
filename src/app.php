@@ -16,11 +16,6 @@ $app->register(new UrlGeneratorServiceProvider());
 $app->register(new ValidatorServiceProvider());
 $app->register(new ServiceControllerServiceProvider());
 $app->register(new TwigServiceProvider());
-$app['twig'] = $app->share($app->extend('twig', function ($twig, $app) {
-    // add custom globals, filters, tags, ...
-
-    return $twig;
-}));
 $app['odm'] = $app->share(function() use ($app) {
     AnnotationDriver::registerAnnotationClasses();
 
@@ -42,5 +37,19 @@ $app['sharer'] = $app->share(function() use ($app) {
 
     return $manager;
 });
+$app['auth.twitter'] = $app->share(function() use ($app) {
+    $config = $app['sharer.config']['twitter'];
+
+    $twitter = new \SMYQ\Authentication\Twitter($config['key'], $config['secret']);
+    $twitter->setSession(new \Symfony\Component\HttpFoundation\Session\Session());
+    $twitter->loadFromSession();
+
+    return $twitter;
+});
+$app['twig'] = $app->share($app->extend('twig', function (Twig_Environment $twig, $app) {
+    $twig->addGlobal('_logged_in', $app['auth.twitter']->isLoggedIn());
+
+    return $twig;
+}));
 
 return $app;

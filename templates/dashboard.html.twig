@@ -1,0 +1,87 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+    <!-- One -->
+    <section id="one" class="wrapper style1">
+        <div class="container">
+            <div class="row">
+                <div class="6u">
+                    <section class="special">
+                        <h3>Manage Share Points</h3>
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for point in user.sharePoints %}
+                                <tr>
+                                    <td>{{ point.name }}</td>
+                                    <td>{{ point.type }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <ul class="actions">
+                            <li><button class="button alt">Create</button></li>
+                        </ul>
+                    </section>
+                </div>
+                <div class="6u">
+                    <section class="special">
+                        <h3>Manage Social Accounts</h3>
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for account in user.socialAccounts %}
+                                <tr>
+                                    <td>{{ account.name }}</td>
+                                    <td>{{ account.type }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <ul class="actions">
+                            <li><button class="button alt" disabled>Create</button></li>
+                        </ul>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Two -->
+    {#<section id="two" class="wrapper style2">#}
+        {#<header class="major">#}
+            {#<h2>Latest events feed...</h2>#}
+        {#</header>#}
+        {#<div class="container">#}
+            {#<div class="row">#}
+                {#<div class="12u">#}
+                    {#{% for event in latestSharedEvents %}#}
+                        {#<section class="special">#}
+                            {#<p>#}
+                                {#Event #{{ event.id }} of type {{ event.type }}#}
+                                {#shared on {{ event.datetime|date("F j, Y at g:ia") }}:<br/>#}
+                                {#<small>{{ event.sharedText }}</small>#}
+                            {#</p>#}
+                        {#</section>#}
+                    {#{% else %}#}
+                        {#<section class="special">#}
+                            {#<h3>...</h3>#}
+                        {#</section>#}
+                    {#{% endfor %}#}
+                {#</div>#}
+            {#</div>#}
+        {#</div>#}
+    {#</section>#}
+{% endblock %}

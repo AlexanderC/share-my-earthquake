@@ -23,7 +23,11 @@
             <ul>
                 <li><a href="/">Home</a></li>
                 <li><a href="/dashboard">Dashboard</a></li>
-                <li><a href="javascript:_smyq.login()" class="button special">Sign In</a></li>
+                {% if _logged_in %}
+                    <li><a href="javascript:_smyq.logout()" class="button special">Logout</a></li>
+                {% else %}
+                    <li><a href="javascript:_smyq.login()" class="button special">Sign In</a></li>
+                {% endif %}
             </ul>
         </nav>
     </header>

@@ -34,7 +34,7 @@ class User extends AbstractDocument
      * @var string
      * @ODM\String()
      */
-    protected $email;
+    protected $identifier;
 
     /**
      * @var SharePoint[]
@@ -51,18 +51,18 @@ class User extends AbstractDocument
     /**
      * @return string
      */
-    public function getEmail()
+    public function getIdentifier()
     {
-        return $this->email;
+        return $this->identifier;
     }
 
     /**
-     * @param string $email
+     * @param string $identifier
      * @return $this
      */
-    public function setEmail($email)
+    public function setIdentifier($identifier)
     {
-        $this->email = $email;
+        $this->identifier = $identifier;
         return $this;
     }
 

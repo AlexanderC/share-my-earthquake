@@ -9,7 +9,10 @@
 
         return {
             login: function() {
-                console.log("Login...");
+                window.location = '/login';
+            },
+            logout: function() {
+                window.location = '/logout';
             }
         };
     };
