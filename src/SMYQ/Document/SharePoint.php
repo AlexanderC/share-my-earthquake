@@ -18,7 +18,7 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
  * @ODM\Document(collection="share_points")
  * @ODM\Index(keys={"coordinates"="2d"})
  */
-class SharePoint extends AbstractDocument
+class SharePoint extends AbstractDocument implements EventInterface
 {
     /**
      * @var string
@@ -30,7 +30,7 @@ class SharePoint extends AbstractDocument
      * @var string
      * @ODM\String()
      */
-    protected $type = EventInterface::EARTHQUAKE;
+    protected $type = self::EARTHQUAKE;
 
     /**
      * @var Coordinates

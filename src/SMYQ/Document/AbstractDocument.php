@@ -15,7 +15,7 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
  * Class AbstractDocument
  * @package SMYQ\Document
  */
-abstract class AbstractDocument
+abstract class AbstractDocument implements \JsonSerializable
 {
     /**
      * @var string
@@ -29,6 +29,23 @@ abstract class AbstractDocument
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function jsonSerialize()
+    {
+        $reflection = new \ReflectionClass($this);
+        $properties = $reflection->getProperties(\ReflectionProperty::IS_PROTECTED);
+
+        $result = [];
+
+        foreach($properties as $property) {
+            $result[$property->getName()] = $this->{$property->getName()};
+        }
+
+        return $result;
     }
 
     /**

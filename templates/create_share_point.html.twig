@@ -1,0 +1,62 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block js %}
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCQ7WvegWOs3CiB3-pRCSYYzjC0CV637AE"></script>
+    <script src="/js/event_point_create.js"></script>
+{% endblock %}
+
+{% block content %}
+    <!-- One -->
+    <section id="one" class="wrapper style1">
+        <div class="container">
+            <div class="row">
+                <div class="6u">
+                    <section class="special">
+                        <h3>Create Share Point</h3>
+                        <form id="create-share-point">
+                            <input type="text" name="name" placeholder="Exter Share Point name (ex. Rancho from Texas)" required/>
+
+                            <label> Select hazard type
+                                <select name="type" required>
+                                    <option value="earthquake" selected>Earthquake</option>
+                                </select>
+                            </label>
+
+                            <label> Select social account
+                                <select name="social_account_id" placeholder="Select the social account to post events in" required>
+                                    {% for account in user.socialAccounts %}
+                                    <option value="{{ account.id }}" selected>{{ account.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </label>
+
+                            <label> Customize template to be used
+                                <textarea name="template" placeholder="Enter the share template to be used">{{ "Eathquake!! Seems to be {{earthquake.mag}} magnitude ({{earthquake.place}})"|raw }}</textarea>
+                                <small>* follow <a target="_blank" href="http://earthquake.usgs.gov/earthquakes/feed/v1.0/glossary.php">this link</a> for event properties description</small>
+                            </label>
+
+                            <input type="hidden" name="latitude" required/>
+                            <input type="hidden" name="longitude" required/>
+                            <input type="hidden" name="distance" required/>
+                        </form>
+                        <ul class="actions">
+                            <li><button class="button alt" onclick="window.Mapper.updateFormWithMapArea('#create-share-point');window._smyq.createSharePoint('#create-share-point')">Create</button></li>
+                        </ul>
+                    </section>
+                </div>
+                <div class="6u">
+                    <section class="special">
+                        <h3>Select hazard zone</h3>
+                        <div id="hazard-map"></div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="hidden hazard-create">
+
+    </div>
+{% endblock %}

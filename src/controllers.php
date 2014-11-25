@@ -35,6 +35,90 @@ $app->get('/logout', function () use ($app) {
 })
 ->bind('logout');
 
+$app->post('/api/share-point/{type}/create', function ($type) use ($app) {
+    $twitter = $app['auth.twitter'];
+
+    $request = $app['request'];
+
+    foreach(['name', 'template', 'latitude', 'longitude', 'distance', 'social_account_id'] as $var) {
+        $$var = $request->get($var, null);
+    }
+
+    if(!$twitter->isLoggedIn()) {
+        return new JsonResponse([
+            'status' => 401,
+            'error' => 'Not Authorized',
+            'errorDescription' => 'You must be logged in'
+        ]);
+    } elseif($type !== \SMYQ\Document\SharePoint::EARTHQUAKE) {
+        return new JsonResponse([
+            'status' => 406,
+            'error' => 'Not Acceptable',
+            'errorDescription' => sprintf('Only %s type is currently supported', \SMYQ\Document\SharePoint::EARTHQUAKE)
+        ]);
+    }
+
+    $dm = $app['odm'];
+    $securityUser = $twitter->getUser();
+    $user = $securityUser->loadFromDb($dm);
+
+    $socialAccount = $dm->getRepository(\SMYQ\Document\SocialAccount::class)->findOneBy(['id' => $social_account_id]);
+
+    if(!$socialAccount) {
+        return new JsonResponse([
+            'status' => 404,
+            'error' => 'Not Found',
+            'errorDescription' => sprintf('There is no such social account')
+        ]);
+    }
+
+    $coordinates = new \SMYQ\Document\Coordinates();
+    $coordinates->setLatitude((float) $latitude);
+    $coordinates->setLongitude((float) $longitude);
+
+    $sharePoint = new \SMYQ\Document\SharePoint();
+    $sharePoint->setType($type);
+    $sharePoint->setName($name);
+    $sharePoint->setDistance((float) $distance);
+    $sharePoint->setCoordinates($coordinates);
+    $sharePoint->setSocialAccount($socialAccount);
+
+    $user->addSharePoint($sharePoint);
+
+    $dm->persist($sharePoint);
+    $dm->persist($user);
+
+    try {
+        $dm->flush();
+
+        return new JsonResponse($sharePoint);
+    } catch(\Exception $e) {
+        return new JsonResponse([
+            'status' => 500,
+            'error' => 'Internal Server Error',
+            'errorDescription' => $e->getMessage()
+        ]);
+    }
+})
+->bind('api_create_share_point');
+
+$app->get('/share-point/create', function () use ($app) {
+    $twitter = $app['auth.twitter'];
+
+    if(!$twitter->isLoggedIn()) {
+        return new RedirectResponse('/login');
+    }
+
+    $dm = $app['odm'];
+    $securityUser = $twitter->getUser();
+    $user = $securityUser->loadFromDb($dm);
+
+    return $app['twig']->render('create_share_point.html.twig', [
+        'user' => $user
+    ]);
+})
+->bind('create_share_point');
+
 $app->get('/dashboard', function () use ($app) {
     $twitter = $app['auth.twitter'];
 

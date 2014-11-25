@@ -19,6 +19,7 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Type</th>
+                                <th>Location</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -26,12 +27,16 @@
                                 <tr>
                                     <td>{{ point.name }}</td>
                                     <td>{{ point.type }}</td>
+                                    <td>
+                                        <b>R:</b>{{ point.distance }}km /
+                                        <b>Lat:</b>{{ point.coordinates.latitude|number_format(5) }};<b>Lng:</b>{{ point.coordinates.longitude|number_format(5) }}
+                                    </td>
                                 </tr>
                             {% endfor %}
                             </tbody>
                         </table>
                         <ul class="actions">
-                            <li><button class="button alt">Create</button></li>
+                            <li><a href="/share-point/create" class="button alt">Create</a></li>
                         </ul>
                     </section>
                 </div>

@@ -1,0 +1,7 @@
+.hidden {
+    display: none;
+}
+
+#hazard-map {
+    height: 350px;
+}
