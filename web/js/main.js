@@ -10,12 +10,36 @@
         };
         config = $.extend(defaults, config);
 
+        function showMessage(message, type)
+        {
+            alert(type.toUpperCase() + ': ' + message);
+        }
+
         return {
+            showMessage: function(message, type) {
+                showMessage(message, type);
+            },
             login: function() {
                 window.location = '/login';
             },
             logout: function() {
                 window.location = '/logout';
+            },
+            deleteSharePoint: function(id, selectorToRemove) {
+                var url = config.basePath + '/api/share-point/' +id;
+
+                $.ajax({
+                    url: url,
+                    type: "DELETE",
+                    dataType: "json",
+                    success: function(response) {
+                        if(response.error) {
+                            showMessage(response.errorDescription, 'error');
+                        } else {
+                            $(selectorToRemove).remove();
+                        }
+                    }
+                });
             },
             createSharePoint: function(form) {
                 var $form = $(form);
@@ -28,7 +52,7 @@
 
                 var type = $form.find(config.hazardTypeFormSelector).val();
 
-                var url = config.basePath + '/api/share-point/' + type + '/create';
+                var url = config.basePath + '/api/share-point/' + type;
 
                 $.ajax({
                     url: url,
@@ -37,7 +61,7 @@
                     data: $form.serialize(),
                     success: function(response) {
                         if(response.error) {
-                            alert(response.errorDescription);
+                            showMessage(response.errorDescription, 'error');
                         } else {
                             window.location = config.basePath + "/dashboard";
                         }

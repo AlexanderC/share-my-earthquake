@@ -35,7 +35,58 @@ $app->get('/logout', function () use ($app) {
 })
 ->bind('logout');
 
-$app->post('/api/share-point/{type}/create', function ($type) use ($app) {
+$app->delete('/api/share-point/{id}', function ($id) use ($app) {
+    $twitter = $app['auth.twitter'];
+
+    if(!$twitter->isLoggedIn()) {
+        return new JsonResponse([
+            'status' => 401,
+            'error' => 'Not Authorized',
+            'errorDescription' => 'You must be logged in'
+        ]);
+    }
+
+    $dm = $app['odm'];
+    $securityUser = $twitter->getUser();
+    $user = $securityUser->loadFromDb($dm);
+
+    $sharePoint = $dm->getRepository(\SMYQ\Document\SharePoint::class)->find($id);
+
+    if(!$sharePoint) {
+        return new JsonResponse([
+            'status' => 404,
+            'error' => 'Not Found',
+            'errorDescription' => 'No such share point found'
+        ]);
+    } elseif(!$user->getSharePoints()->contains($sharePoint)) {
+        return new JsonResponse([
+            'status' => 406,
+            'error' => 'Not Acceptable',
+            'errorDescription' => 'You can not delete foreign share point'
+        ]);
+    }
+
+    $user->removeSharePoint($sharePoint);
+
+    try {
+        $dm->remove($sharePoint);
+        $dm->persist($user);
+        $dm->flush();
+
+        return new JsonResponse([
+            'status' => 200,
+        ]);
+    } catch(\Exception $e) {
+        return new JsonResponse([
+            'status' => 500,
+            'error' => 'Internal Server Error',
+            'errorDescription' => $e->getMessage()
+        ]);
+    }
+})
+->bind('api_delete_share_point');
+
+$app->post('/api/share-point/{type}', function ($type) use ($app) {
     $twitter = $app['auth.twitter'];
 
     $request = $app['request'];

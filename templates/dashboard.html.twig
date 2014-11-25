@@ -17,20 +17,25 @@
                         <table>
                             <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Type</th>
-                                <th>Location</th>
+                                <th class="align-center">Location</th>
+                                <th class="align-center">Name</th>
+                                <th class="align-center">Type</th>
+                                <th></th>
                             </tr>
                             </thead>
                             <tbody>
                             {% for point in user.sharePoints %}
-                                <tr>
+                                <tr id="share-point-item-{{ point.id }}">
+                                    <td>
+                                        <a target="_blank" href="https://www.google.com/maps/@{{ point.coordinates.latitude }},{{ point.coordinates.longitude }},8z">
+                                            <b>R: </b>{{ point.distance }}km<br/>
+                                            <b>Lat: </b>{{ point.coordinates.latitude|number_format(3) }}<br/>
+                                            <b>Lng: </b>{{ point.coordinates.longitude|number_format(3) }}
+                                        </a>
+                                    </td>
                                     <td>{{ point.name }}</td>
                                     <td>{{ point.type }}</td>
-                                    <td>
-                                        <b>R:</b>{{ point.distance }}km /
-                                        <b>Lat:</b>{{ point.coordinates.latitude|number_format(5) }};<b>Lng:</b>{{ point.coordinates.longitude|number_format(5) }}
-                                    </td>
+                                    <td><a href="javascript:window._smyq.deleteSharePoint('{{ point.id }}', '#share-point-item-{{ point.id }}');"><i class="fa fa-remove"></i></a></td>
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -46,8 +51,8 @@
                         <table>
                             <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Type</th>
+                                <th class="align-center">Name</th>
+                                <th class="align-center">Type</th>
                             </tr>
                             </thead>
                             <tbody>

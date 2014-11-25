@@ -53,7 +53,7 @@ abstract class AbstractDocument implements \JsonSerializable
      * @param mixed $element
      * @return $this
      */
-    protected function removeFromCollection(array & $collection, $element)
+    protected function removeFromCollection($collection, $element)
     {
         foreach($collection as $key => $item) {
             if($item === $element) {
@@ -71,7 +71,7 @@ abstract class AbstractDocument implements \JsonSerializable
      * @param mixed $element
      * @return bool
      */
-    protected function collectionContains(array $collection, $element)
+    protected function collectionContains($collection, $element)
     {
         return false !== array_search($element, $collection, true);
     }
