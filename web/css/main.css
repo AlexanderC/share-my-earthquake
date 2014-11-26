@@ -5,3 +5,18 @@
 #hazard-map {
     height: 350px;
 }
+
+.hazard-preview {
+    height: 200px;
+    background: url(/images/tweet_bg.jpg) no-repeat center;
+    background-size: 100%;
+}
+
+.hazard-preview .wrapper {
+    font-size: 11px !important;
+    padding-top: 108px;
+    word-break: break-all;
+    padding-left: 40px;
+    line-height: 11px;
+    text-align: left;
+}

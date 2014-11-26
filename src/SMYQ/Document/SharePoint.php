@@ -40,7 +40,7 @@ class SharePoint extends AbstractDocument implements EventInterface
 
     /**
      * @var float
-     * @ODM\Distance()
+     * @ODM\Float()
      */
     protected $distance;
 
@@ -61,6 +61,30 @@ class SharePoint extends AbstractDocument implements EventInterface
      * @ODM\ReferenceMany(targetDocument="SMYQ\Document\SharedEvent", cascade={"persist"})
      */
     protected $sharedEvents = [];
+
+    /**
+     * @var float
+     * @ODM\Distance()
+     */
+    protected $calculatedDistance;
+
+    /**
+     * @return float
+     */
+    public function getCalculatedDistance()
+    {
+        return $this->calculatedDistance;
+    }
+
+    /**
+     * @param float $calculatedDistance
+     * @return $this
+     */
+    public function setCalculatedDistance($calculatedDistance)
+    {
+        $this->calculatedDistance = $calculatedDistance;
+        return $this;
+    }
 
     /**
      * @return string

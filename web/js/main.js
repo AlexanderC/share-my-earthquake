@@ -25,6 +25,23 @@
             logout: function() {
                 window.location = '/logout';
             },
+            previewShare: function(type, template, callback) {
+                var url = config.basePath + '/index_dev.php/api/social-preview/' + type;
+
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: {template: template},
+                    dataType: "json",
+                    success: function(response) {
+                        if(response.error) {
+                            showMessage(response.errorDescription, 'error');
+                        } else {
+                            callback(response.preview);
+                        }
+                    }
+                });
+            },
             deleteSharePoint: function(id, selectorToRemove) {
                 var url = config.basePath + '/api/share-point/' +id;
 

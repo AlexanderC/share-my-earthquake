@@ -65,4 +65,33 @@
         window.Mapper.init();
         window.Mapper.drawMapArea(0, 0);
     });
+
+    window.hidePreview = function()
+    {
+        var $container = $("#one").find("div.row");
+
+        var $preview = $container.find("div.6u:first").next();
+        $preview.addClass("hidden");
+        var $form = $container.find("div.6u:first");
+        $form.removeClass("hidden");
+    };
+
+    window.preview = function()
+    {
+        var $container = $("#one").find("div.row");
+
+        var $form = $container.find("div.6u:first");
+        $form.addClass("hidden");
+        var $preview = $container.find("div.6u:first").next();
+        $preview.removeClass("hidden");
+
+        window._smyq.previewShare(
+            $form.find('select[name=type]').val(),
+            $form.find('textarea[name=template]').val(),
+            function(preview) {
+                $preview.find("div.hazard-preview").find("div.wrapper").text(preview);
+                $preview.find(".hazard-name").text($form.find('input[name=name]').val());
+            }
+        );
+    };
 })(jQuery);

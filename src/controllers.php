@@ -35,6 +35,52 @@ $app->get('/logout', function () use ($app) {
 })
 ->bind('logout');
 
+$app->post('/api/social-preview/{type}', function ($type) use ($app) {
+    $twitter = $app['auth.twitter'];
+    $template = $app['request']->get('template');
+
+    if(!$twitter->isLoggedIn()) {
+        return new JsonResponse([
+            'status' => 401,
+            'error' => 'Not Authorized',
+            'errorDescription' => 'You must be logged in'
+        ]);
+    } elseif($type !== \SMYQ\Document\SharePoint::EARTHQUAKE) {
+        return new JsonResponse([
+            'status' => 406,
+            'error' => 'Not Acceptable',
+            'errorDescription' => sprintf('Only %s type is currently supported', \SMYQ\Document\SharePoint::EARTHQUAKE)
+        ]);
+    }
+
+    $sharePoint = new \SMYQ\Document\SharePoint();
+    $sharePoint->setName("Preview");
+    $sharePoint->setType($type);
+    $sharePoint->setDistance(777);
+    $sharePoint->setCalculatedDistance(333);
+    $sharePoint->setCoordinates(new \SMYQ\Document\Coordinates(77, 33));
+    $sharePoint->setTemplate($template);
+
+    $url = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson";
+    $geoJsonData = @json_decode(@file_get_contents($url) ? : []) ? : [];
+
+    /** @var \GeoJson\Feature\FeatureCollection $featureCollection */
+    $featureCollection = \GeoJson\GeoJson::jsonUnserialize($geoJsonData);
+    /** @var \GeoJson\Feature\Feature $feature */
+    $feature = $featureCollection->getIterator()->current();
+    $properties = $feature->getProperties();
+    $template = new \SMYQ\Share\Template();
+    $event = (new \SMYQ\Event\Earthquake())->populate($properties);
+
+    $preview = $template->render($sharePoint, $event);
+
+    return new JsonResponse([
+        'status' => 200,
+        'preview' => $preview
+    ]);
+})
+->bind('social_preview');
+
 $app->delete('/api/share-point/{id}', function ($id) use ($app) {
     $twitter = $app['auth.twitter'];
 

@@ -28,7 +28,7 @@
                                 <tr id="share-point-item-{{ point.id }}">
                                     <td>
                                         <a target="_blank" href="https://www.google.com/maps/@{{ point.coordinates.latitude }},{{ point.coordinates.longitude }},8z">
-                                            <b>R: </b>{{ point.distance }}km<br/>
+                                            <b>R: </b>{{ point.distance|number_format(3) }}km<br/>
                                             <b>Lat: </b>{{ point.coordinates.latitude|number_format(3) }}<br/>
                                             <b>Lng: </b>{{ point.coordinates.longitude|number_format(3) }}
                                         </a>

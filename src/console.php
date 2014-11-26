@@ -42,6 +42,8 @@ $console
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
         $dm = $app['odm'];
+        $dm->getSchemaManager()->ensureIndexes();
+
         /** @var Manager $sharer */
         $sharer = $app['sharer'];
 
@@ -49,13 +51,21 @@ $console
             /** @var Feature $feature */
             $feature = $iterator->current();
             $properties = $feature->getProperties();
-            $point = $feature->getGeometry();
+            $geometry = $feature->getGeometry();
+            list($latitude, $longitude) = $geometry->getCoordinates();
 
+            $dm->clear();// hook to fix issue with distance mapping...
             $sharePoints = $dm->createQueryBuilder(SharePoint::class)
-                ->geoNear($point)
-                ->spherical(true)
+                ->field('coordinates')
+                ->geoNear($latitude, $longitude)
                 ->distanceMultiplier(\SMYQ\Helper\Distance::KILOMETERS_MULTIPLIER)
-                ->getQuery()->execute();
+//                ->group(['_id' => '$id'], [], "function() {
+//                    printjson(this.obj);
+//                }")
+//                ->finalize("function() {
+//                    printjson(this.obj);
+//                }")
+                ->getQuery();
 
             if(empty($sharePoints)) {
                 $output->writeln(sprintf("<info>No share points found for event #%s</info>", $feature->getId()));
@@ -64,6 +74,9 @@ $console
 
                 /** @var SharePoint $sharePoint */
                 foreach($sharePoints as $sharePoint) {
+                    echo "Coordinates: $latitude, $longitude [original {$sharePoint->getCoordinates()->getLatitude()}, {$sharePoint->getCoordinates()->getLongitude()}]\n";
+                    echo "Distance: {$sharePoint->getCalculatedDistance()}km [original {$sharePoint->getDistance()}km]\n\n";
+
                     $text = $template->render($sharePoint, $event);
                     $socialAccount = $sharePoint->getSocialAccount();
 
