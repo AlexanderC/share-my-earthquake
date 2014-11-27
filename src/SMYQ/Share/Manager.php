@@ -23,11 +23,34 @@ class Manager
     protected $config;
 
     /**
+     * @var \SMYQ\Authentication\Twitter
+     */
+    protected $twitter;
+
+    /**
      * @param array $config
      */
     function __construct(array $config)
     {
         $this->config = $config;
+    }
+
+    /**
+     * @return \SMYQ\Authentication\Twitter
+     */
+    public function getTwitter()
+    {
+        return $this->twitter;
+    }
+
+    /**
+     * @param \SMYQ\Authentication\Twitter $twitter
+     * @return $this
+     */
+    public function setTwitter(\SMYQ\Authentication\Twitter $twitter)
+    {
+        $this->twitter = $twitter;
+        return $this;
     }
 
     /**
@@ -37,6 +60,11 @@ class Manager
      */
     public function share(SocialAccount $socialAccount, $text)
     {
-        // TODO: implement
+        $client = clone $this->twitter->getClient();
+        $client->setToken($socialAccount->getIdentifier(), $socialAccount->getSecret());
+
+        $result = (array) $client->statuses_update(['status' => $text]);
+
+        return !isset($result['errors']) || empty($result['errors']);
     }
 } 

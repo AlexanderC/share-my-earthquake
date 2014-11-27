@@ -58,13 +58,9 @@ $console
             $sharePoints = $dm->createQueryBuilder(SharePoint::class)
                 ->field('coordinates')
                 ->geoNear($latitude, $longitude)
-                ->distanceMultiplier(\SMYQ\Helper\Distance::KILOMETERS_MULTIPLIER)
-//                ->group(['_id' => '$id'], [], "function() {
-//                    printjson(this.obj);
-//                }")
-//                ->finalize("function() {
-//                    printjson(this.obj);
-//                }")
+                // todo: Figure out this
+                //->distanceMultiplier(\SMYQ\Helper\Distance::KILOMETERS_MULTIPLIER)
+                //->maxDistance(6000 * \SMYQ\Helper\Distance::KILOMETERS_MULTIPLIER) // what's a magic here =)
                 ->getQuery();
 
             if(empty($sharePoints)) {
@@ -72,10 +68,43 @@ $console
             } else {
                 $event = (new \SMYQ\Event\Earthquake())->populate($properties);
 
+                $output->writeln(sprintf(
+                    "<info>Start matching event #%s... (%f:%f)</info>",
+                    $feature->getId(),
+                    $latitude,
+                    $longitude
+                ));
+
                 /** @var SharePoint $sharePoint */
                 foreach($sharePoints as $sharePoint) {
-                    echo "Coordinates: $latitude, $longitude [original {$sharePoint->getCoordinates()->getLatitude()}, {$sharePoint->getCoordinates()->getLongitude()}]\n";
-                    echo "Distance: {$sharePoint->getCalculatedDistance()}km [original {$sharePoint->getDistance()}km]\n\n";
+                    $output->writeln(sprintf(
+                        "<info>Matching event #%s for share point #%s...</info>",
+                        $feature->getId(),
+                        $sharePoint->getId()
+                    ));
+
+                    if($sharePoint->getCalculatedDistance() > $sharePoint->getDistance()) {
+                        continue;
+                    }
+
+                    $sharedEvent = $dm->createQueryBuilder(\SMYQ\Document\SharedEvent::class)
+                        ->field('eventId')->equals($feature->getId())
+                        ->getQuery()->getSingleResult();
+
+                    if($sharedEvent) {
+                        $output->writeln(sprintf(
+                            "<info>Event #%s already shared for share point #%s. Skipping...</info>",
+                            $feature->getId(),
+                            $sharePoint->getId()
+                        ));
+                        continue;
+                    }
+
+                    $output->writeln(sprintf(
+                        "<info>Sharing event #%s for share point #%s!</info>",
+                        $feature->getId(),
+                        $sharePoint->getId()
+                    ));
 
                     $text = $template->render($sharePoint, $event);
                     $socialAccount = $sharePoint->getSocialAccount();

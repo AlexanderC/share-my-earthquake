@@ -179,6 +179,7 @@ $app->post('/api/share-point/{type}', function ($type) use ($app) {
     $sharePoint->setDistance((float) $distance);
     $sharePoint->setCoordinates($coordinates);
     $sharePoint->setSocialAccount($socialAccount);
+    $sharePoint->setTemplate($template);
 
     $user->addSharePoint($sharePoint);
 

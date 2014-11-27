@@ -32,11 +32,6 @@ $app['odm'] = $app->share(function() use ($app) {
 
     return $documentManager;
 });
-$app['sharer'] = $app->share(function() use ($app) {
-    $manager = new Manager($app['sharer.config']);
-
-    return $manager;
-});
 $app['auth.twitter'] = $app->share(function() use ($app) {
     $config = $app['sharer.config']['twitter'];
 
@@ -45,6 +40,12 @@ $app['auth.twitter'] = $app->share(function() use ($app) {
     $twitter->loadFromSession();
 
     return $twitter;
+});
+$app['sharer'] = $app->share(function() use ($app) {
+    $manager = new Manager($app['sharer.config']);
+    $manager->setTwitter($app['auth.twitter']);
+
+    return $manager;
 });
 $app['twig'] = $app->share($app->extend('twig', function (Twig_Environment $twig, $app) {
     $twitter = $app['auth.twitter'];
