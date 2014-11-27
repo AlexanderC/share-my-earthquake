@@ -26,7 +26,7 @@
                 window.location = '/logout';
             },
             previewShare: function(type, template, callback) {
-                var url = config.basePath + '/index_dev.php/api/social-preview/' + type;
+                var url = config.basePath + '/api/social-preview/' + type;
 
                 $.ajax({
                     url: url,
