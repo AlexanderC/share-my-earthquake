@@ -62,12 +62,15 @@ $app->post('/api/social-preview/{type}', function ($type) use ($app) {
     $sharePoint->setTemplate($template);
 
     $url = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson";
-    $geoJsonData = @json_decode(@file_get_contents($url) ? : []) ? : [];
+    $geoJsonData = require __DIR__ . '/../config/eq.sample.php';
 
     /** @var \GeoJson\Feature\FeatureCollection $featureCollection */
     $featureCollection = \GeoJson\GeoJson::jsonUnserialize($geoJsonData);
+
+    $features = $featureCollection->getFeatures();
+
     /** @var \GeoJson\Feature\Feature $feature */
-    $feature = $featureCollection->getIterator()->current();
+    $feature = $features[round(mt_rand(0, $featureCollection->count() - 1))];
     $properties = $feature->getProperties();
     $template = new \SMYQ\Share\Template();
     $event = (new \SMYQ\Event\Earthquake())->populate($properties);
