@@ -59,7 +59,7 @@ $console
                 ->field('coordinates')
                 ->geoNear($latitude, $longitude)
                 // todo: Figure out this
-                //->distanceMultiplier(\SMYQ\Helper\Distance::KILOMETERS_MULTIPLIER)
+                ->distanceMultiplier(\SMYQ\Helper\Distance::KILOMETERS_MULTIPLIER)
                 //->maxDistance(6000 * \SMYQ\Helper\Distance::KILOMETERS_MULTIPLIER) // what's a magic here =)
                 ->getQuery();
 
@@ -75,6 +75,8 @@ $console
                     $longitude
                 ));
 
+                echo "\nEV: $latitude, $longitude\n";
+
                 /** @var SharePoint $sharePoint */
                 foreach($sharePoints as $sharePoint) {
                     $output->writeln(sprintf(
@@ -82,7 +84,9 @@ $console
                         $feature->getId(),
                         $sharePoint->getId()
                     ));
-
+echo "\nSP: {$sharePoint->getCoordinates()->getLatitude()}, {$sharePoint->getCoordinates()->getLongitude()}\n";
+                    echo "\n{$sharePoint->getCalculatedDistance()} VS {$sharePoint->getDistance()}\n";
+                    continue;
                     if($sharePoint->getCalculatedDistance() > $sharePoint->getDistance()) {
                         continue;
                     }
